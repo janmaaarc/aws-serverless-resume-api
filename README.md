@@ -86,7 +86,7 @@ def lambda_handler(event, context):
 ## Screenshots
 
 ### Architecture Diagram
-![EC2 Dashboard](screenshots/ec2-dashboard.png)
+![EC2 Dashboard](screenshots/project-api.png)
 
 ### S3 Bucket Configuration
 ![SSH Terminal](screenshots/ssh-terminal.png)
