@@ -1,113 +1,93 @@
-AWS Serverless Resume API (PDF)
+# AWS Serverless Resume API (PDF)
 
-Objectives
+## Objectives
+- Architect a serverless backend using AWS Lambda and API Gateway.
+- Securely store a resume PDF in a private Amazon S3 bucket.
+- Solve the technical challenge of serving binary files (PDFs) via a JSON-based API.
+- Implement Python logic to fetch and Base64 encode files for HTTP transmission.
+- Verify the public API endpoint via web browser.
 
-Architect a serverless backend using AWS Lambda and API Gateway.
+---
 
-Securely store a resume PDF in a private Amazon S3 bucket.
+## Steps
 
-Solve the technical challenge of serving binary files (PDFs) via a JSON-based API.
+### 1. S3 Storage Setup
+- Created a unique S3 bucket (e.g., `janmarc-resume-storage`).
+- Uploaded `resume.pdf` to the bucket.
+- **Security Configuration:** Blocked all public access to the bucket to ensure the file is only accessible via the API, not the public internet.
 
-Implement Python logic to fetch and Base64 encode files for HTTP transmission.
+### 2. Lambda Function Configuration
+- Created a Python 3.x Lambda function.
+- Assigned an IAM Role with specific permissions (`s3:GetObject`) to read only from the resume bucket.
+- Wrote a Python script using `boto3` to:
+  #### 1. Fetch the PDF object from S3.
+  #### 2. Convert the binary PDF data into a Base64 string (essential for API Gateway transmission).
 
-Verify the public API endpoint via web browser.
+### 3. Connect to EC2 via SSH (MacBook)
+```bash
+# Navigate to key folder
+cd ~/Documents/documents/aws-keys
 
-Steps
+# Secure the key
+chmod 400 project1-key.pem
 
-1. S3 Storage Setup
+# Connect to EC2 instance
+ssh -i project1-key.pem ec2-user@<EC2-PUBLIC-IP>
+```
 
-Created a unique S3 bucket (e.g., janmarc-resume-storage).
+### 4. Verify Instance
+```bash
+# Check OS info
+uname -a
 
-Uploaded resume.pdf to the bucket.
+# Check disk usage
+df -h
 
-Security Configuration: Blocked all public access to the bucket to ensure the file is only accessible via the API, not the public internet.
+# Check uptime
+uptime
 
-2. Lambda Function Configuration
+# Update packages
+sudo yum update -y
 
-Created a Python 3.x Lambda function.
+# Install Git
+sudo yum install git -y
+```
 
-Assigned an IAM Role with specific permissions (s3:GetObject) to read only from the resume bucket.
+---
 
-Wrote a Python script using boto3 to:
+## Commands Used
+```
+cd ~/Documents/documents/aws-keys
+chmod 400 project1-key.pem
+ssh -i project1-key.pem ec2-user@3.27.13.213
+uname -a
+df -h
+uptime
+sudo yum update -y
+sudo yum install git -y
+```
 
-Fetch the PDF object from S3.
+---
 
-Convert the binary PDF data into a Base64 string (essential for API Gateway transmission).
+## Notes / Lessons Learned
+- Launching an EC2 instance on AWS Free Tier is straightforward and beginner-friendly.
+- SSH connection requires the `.pem` key to have proper permissions (`chmod 400`).
+- Security group must allow your current IP for port 22 to enable SSH access.
+- Basic Linux commands (`uname -a`, `df -h`, `uptime`) are useful to verify instance health and configuration.
+- Always update the instance (`sudo yum update -y`) before installing additional packages.
+- Installing Git (`sudo yum install git -y`) prepares the instance for future cloud projects.
+- Documenting each step and taking screenshots makes troubleshooting easier and ensures reproducibility.
+- AWS Free Tier limits should be monitored to avoid unexpected charges.
 
-Return a JSON response with the header Content-Type: application/pdf and isBase64Encoded: true.
+---
 
-3. API Gateway Integration
+## Screenshots
 
-Configured an HTTP API in API Gateway.
+### EC2 Dashboard
+![EC2 Dashboard](screenshots/ec2-dashboard.png)
 
-Created a GET /resume route triggered by the Lambda function.
+### SSH Terminal Connection
+![SSH Terminal](screenshots/ssh-terminal.png)
 
-Enabled CORS (Cross-Origin Resource Sharing) to allow browsers to request the file.
-
-Deployed the API to a production stage to generate a public Invoke URL.
-
-4. Verification
-
-Tested the API using curl to inspect headers.
-
-Accessed the API Gateway URL in a web browser to confirm the PDF renders/downloads correctly.
-
-Commands & Code Snippet
-
-AWS CLI Commands used for verification:
-
-# Verify file exists in bucket
-aws s3 ls s3://janmarc-resume-storage
-
-# Test the API functionality via terminal
-curl -v https://<api-id>.execute-api.<region>[.amazonaws.com/resume](https://.amazonaws.com/resume)
-
-
-Key Python Logic (Lambda):
-
-import boto3
-import base64
-import os
-
-def lambda_handler(event, context):
-    s3 = boto3.client('s3')
-    bucket = os.environ['BUCKET_NAME']
-    key = 'resume.pdf'
-    
-    # Fetch and encode
-    file_content = s3.get_object(Bucket=bucket, Key=key)['Body'].read()
-    encoded_pdf = base64.b64encode(file_content).decode('utf-8')
-    
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/pdf', 
-            'Content-Disposition': 'inline; filename="resume.pdf"'
-        },
-        'body': encoded_pdf,
-        'isBase64Encoded': True
-    }
-
-
-Notes / Lessons Learned
-
-Binary Data Handling: API Gateway and Lambda usually exchange JSON strings. To serve a PDF, I learned I had to Base64 encode the binary data in Python and explicitly tell API Gateway isBase64Encoded: True so it decodes it back to a binary file for the user.
-
-Least Privilege Security: Instead of making the S3 bucket public (which is risky), I used an IAM Role. This ensures only my specific Lambda function can read the resume, maintaining strict security boundaries.
-
-CORS: I initially encountered errors when calling the API from a browser fetch. I learned that enabling CORS headers (Access-Control-Allow-Origin) in the response is mandatory for web integration.
-
-Cost Efficiency: Because this uses Serverless (Lambda/S3), I effectively pay nothing ($0.00) while the resume is idle, only incurring costs when the API is actually clicked.
-
-Screenshots
-
-Architecture Diagram
-
-
-(Place your generated architecture diagram here)
-
-S3 Bucket Configuration
-
-Lambda Function Code
-
-Successful PDF Render in Browser
+### Linux Commands Output
+![Linux Commands](screenshots/linux-commands.png)
