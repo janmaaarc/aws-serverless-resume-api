@@ -89,10 +89,10 @@ def lambda_handler(event, context):
 ![EC2 Dashboard](images/project-api.png)
 
 ### S3 Bucket Configuration
-![SSH Terminal](images/s3-bucket.png)
+![S3 Bucket Configuration](images/s3-bucket.png)
 
 ### Lambda Function Code
-![Linux Commands](images/lambda-code.png)
+![Lambda Function Code](images/lambda-code.png)
 
 ### Successful PDF Render in Browser
-![Linux Commands](images/pdf-render.png)
+![Successful PDF Render in Browser](images/pdf-render.png)
