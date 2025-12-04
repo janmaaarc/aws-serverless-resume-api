@@ -1,4 +1,4 @@
-# AWS Serverless Resume API (PDF)
+# Serverless Resume API on AWS
 
 A serverless project that securely delivers a private PDF resume using AWS Lambda, S3, and API Gateway. Built with Python to fetch, encode, and serve the file through a public endpoint without exposing the S3 bucket.
 
