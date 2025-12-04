@@ -1,5 +1,19 @@
 # AWS Serverless Resume API (PDF)
 
+---
+
+## Tech Stack
+
+| Category              | Technologies Used                                      |
+|----------------------|--------------------------------------------------------|
+| Cloud Services        | AWS S3, AWS Lambda, AWS API Gateway                   |
+| Programming Language  | Python 3                                          |
+| AWS SDK               | boto3                                                 |
+| Security / Access     | IAM (Least Privilege Role for S3 Access)              |
+| Architecture Style    | Serverless Architecture                               |
+
+---
+
 ## Objectives
 - Architect a serverless backend using AWS Lambda and API Gateway.
 - Securely store a resume PDF in a private Amazon S3 bucket.
