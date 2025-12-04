@@ -107,8 +107,5 @@ def lambda_handler(event, context):
 ### S3 Bucket Configuration
 ![S3 Bucket Configuration](images/s3-bucket.png)
 
-### Lambda Function Code
-![Lambda Function Code](images/lambda-code.png)
-
 ### Successful PDF Render in Browser
 ![Successful PDF Render in Browser](images/pdf-render.png)
